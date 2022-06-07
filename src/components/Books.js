@@ -1,10 +1,28 @@
-import { Grid, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
+import { Grid, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, withStyles } from "@material-ui/core";//from "@mui/material";
 import React, {useState, useEffect} from "react";
 import { connect } from "react-redux";
 import * as actions from "../actions/book"
 import BookForm from "./BookForm";
 
-const Books = (props) => {
+const styles = theme => ({
+    // override class - klase se pobierasz z f12 loool
+    root :{
+        "& .MuiTableCell-head":{
+            fontSize: "1.25rem"
+        }
+    },
+
+    paper :{
+        margin: theme.spacing(2),
+        padding: theme.spacing(2)
+
+    }
+})
+
+// props.classes
+// const[classes ...props] = props
+
+const Books = ({classes,...props}) => {
     const [x,setX] = useState(0);  
 
     useEffect(()=>{
@@ -14,39 +32,44 @@ const Books = (props) => {
 
 
     return ( 
-        <Paper>
-            <Grid container>
-                <Grid item xs={6}>
+        
+        //<Paper className={classes.paper}>
+            <Grid container >
+                <Paper className={classes.paper} md={6} style={{height: '100%'}} elevation={3}>
+                    <Grid>
+                        <TableContainer>
+                            <Table>
+                                <TableHead className={classes.root}>
+                                    <TableRow>
+                                        <TableCell>BookId</TableCell>
+                                        <TableCell>AuthorId</TableCell>
+                                        <TableCell>Title</TableCell>
+                                        <TableCell>PagesNumber</TableCell>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                {
+                                    props.BookList.map((record,index)=>{
+                                            return (<TableRow key={index} hover>
+                                                <TableCell>{record.bookId}</TableCell>
+                                                <TableCell>{record.authorId}</TableCell>
+                                                <TableCell>{record.title}</TableCell>
+                                                <TableCell>{record.pagesNumber}</TableCell>
+                                            </TableRow>)
+                                    })
+                                } 
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
+                    </Grid>
+                </Paper>
+                <Paper className={classes.paper} md={6} style={{height: '300px'}} elevation={3}>
+                <Grid>
                     <BookForm/>
                 </Grid>
-                <Grid item xs={6}>
-                    <TableContainer>
-                        <Table>
-                            <TableHead>
-                                <TableRow>
-                                    <TableCell>BookId</TableCell>
-                                    <TableCell>AuthorId</TableCell>
-                                    <TableCell>Title</TableCell>
-                                    <TableCell>PagesNumber</TableCell>
-                                </TableRow>
-                            </TableHead>
-                            <TableBody>
-                               {
-                                   props.BookList.map((record,index)=>{
-                                        return (<TableRow key={index}>
-                                            <TableCell>{record.bookId}</TableCell>
-                                            <TableCell>{record.authorId}</TableCell>
-                                            <TableCell>{record.title}</TableCell>
-                                            <TableCell>{record.pagesNumber}</TableCell>
-                                        </TableRow>)
-                                   })
-                               } 
-                            </TableBody>
-                        </Table>
-                    </TableContainer>
-                </Grid>
+                </Paper>
             </Grid>
-        </Paper>
+        //</Paper>
      );
 }
 
@@ -60,4 +83,4 @@ const mapActionsToProps = {
     fetchAllBooks : actions.fetchall
 }
 
-export default connect(mapStateToProps, mapActionsToProps)(Books);
+export default connect(mapStateToProps, mapActionsToProps)(withStyles(styles)(Books));
