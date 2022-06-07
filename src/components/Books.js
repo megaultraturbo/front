@@ -35,39 +35,43 @@ const Books = ({classes,...props}) => {
         
         //<Paper className={classes.paper}>
             <Grid container >
-                <Paper className={classes.paper} md={6} style={{height: '100%'}} elevation={3}>
-                    <Grid>
-                        <TableContainer>
-                            <Table>
-                                <TableHead className={classes.root}>
-                                    <TableRow>
-                                        <TableCell>BookId</TableCell>
-                                        <TableCell>AuthorId</TableCell>
-                                        <TableCell>Title</TableCell>
-                                        <TableCell>PagesNumber</TableCell>
-                                    </TableRow>
-                                </TableHead>
-                                <TableBody>
-                                {
-                                    props.BookList.map((record,index)=>{
-                                            return (<TableRow key={index} hover>
-                                                <TableCell>{record.bookId}</TableCell>
-                                                <TableCell>{record.authorId}</TableCell>
-                                                <TableCell>{record.title}</TableCell>
-                                                <TableCell>{record.pagesNumber}</TableCell>
-                                            </TableRow>)
-                                    })
-                                } 
-                                </TableBody>
-                            </Table>
-                        </TableContainer>
-                    </Grid>
-                </Paper>
-                <Paper className={classes.paper} md={6} style={{height: '300px'}} elevation={3}>
-                <Grid>
-                    <BookForm/>
+                <Grid container item xs={6} style={{height: '100%'}}>
+                    <Paper className={classes.paper}   elevation={3}>
+                        <Grid>
+                            <TableContainer>
+                                <Table>
+                                    <TableHead className={classes.root}>
+                                        <TableRow>
+                                            <TableCell>BookId</TableCell>
+                                            <TableCell>AuthorId</TableCell>
+                                            <TableCell>Title</TableCell>
+                                            <TableCell>PagesNumber</TableCell>
+                                        </TableRow>
+                                    </TableHead>
+                                    <TableBody>
+                                    {
+                                        props.BookList.map((record,index)=>{
+                                                return (<TableRow key={index} hover>
+                                                    <TableCell>{record.bookId}</TableCell>
+                                                    <TableCell>{record.authorId}</TableCell>
+                                                    <TableCell>{record.title}</TableCell>
+                                                    <TableCell>{record.pagesNumber}</TableCell>
+                                                </TableRow>)
+                                        })
+                                    } 
+                                    </TableBody>
+                                </Table>
+                            </TableContainer>
+                        </Grid>
+                    </Paper>
                 </Grid>
-                </Paper>
+                <Grid container item xs={6} style={{height: '10px'}}>
+                    <Paper className={classes.paper}   elevation={3}>
+                        
+                            <BookForm/>
+                        
+                    </Paper>
+                </Grid>
             </Grid>
         //</Paper>
      );
