@@ -3,6 +3,7 @@ import { Grid, TextField, withStyles, Button } from "@material-ui/core";
 import useForm from "./useForm";
 import { connect } from "react-redux";
 import * as actions from "../actions/book"
+import { useToasts } from "react-toast-notifications";
 
 const styles = theme => ({
     // override class - klase se pobierasz z f12 loool
@@ -26,11 +27,14 @@ const initalFieldValues = {
 }
 
 const BookForm = ({classes, ...props}) => {
+
+    // tosty for riiil bym zjad tbh gloduwa frrr 100
+    const {addToast} = useToasts()
     
     // validate()
     // validate({title: 'kuba'})
     const validate = (fieldValues = values) => {
-        let temp ={}
+        let temp ={...errors}
         if ('title' in fieldValues)
             temp.title = fieldValues.title?"":"Required"
         if ('authorId' in fieldValues)
@@ -49,23 +53,33 @@ const BookForm = ({classes, ...props}) => {
         setValues,
         errors,
         setErrors,
-        handleInputChange
+        handleInputChange,
+        resetForm,
     } = useForm(initalFieldValues,validate, props.setCurrentId) 
 
     const handleSubmit = e => {
         e.preventDefault()
         console.log(values)
         if(validate()){
-            props.createBook(values, () =>{window.alert('inserted')})
+            const onSuccess = () =>{ 
+                resetForm()
+                addToast("Submitted!",{appearance:"success"})
+            }
+            if(props.currentId==0)
+                props.createBook(values, onSuccess)
+            else
+                props.updateBook(props.currentId, values, onSuccess)
         }
+        
     }
 
     useEffect(()=>{
-        if(props.currentId!=0)
+        if(props.currentId!=0){
         setValues({
             ...props.BookList.find(x => x.bookId == props.currentId)
         })
         setErrors({})
+        }
     }, [props.currentId])
     
 
@@ -107,7 +121,7 @@ const BookForm = ({classes, ...props}) => {
                     <Button variant="contained"
                     color="primary"
                     type="submit">
-                        Add book
+                        Confirm
                     </Button>
 
                 </Grid>
