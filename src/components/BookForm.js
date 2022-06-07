@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import { Grid, TextField, withStyles, Button } from "@material-ui/core";
 import useForm from "./useForm";
 import { connect } from "react-redux";
@@ -50,7 +50,7 @@ const BookForm = ({classes, ...props}) => {
         errors,
         setErrors,
         handleInputChange
-    } = useForm(initalFieldValues,validate) 
+    } = useForm(initalFieldValues,validate, props.setCurrentId) 
 
     const handleSubmit = e => {
         e.preventDefault()
@@ -59,6 +59,15 @@ const BookForm = ({classes, ...props}) => {
             props.createBook(values, () =>{window.alert('inserted')})
         }
     }
+
+    useEffect(()=>{
+        if(props.currentId!=0)
+        setValues({
+            ...props.BookList.find(x => x.bookId == props.currentId)
+        })
+        setErrors({})
+    }, [props.currentId])
+    
 
     return (
         <form onSubmit={handleSubmit} autoComplete="off" noValidate className={classes.root} style={{height: 'auto'}}>

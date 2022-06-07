@@ -1,4 +1,4 @@
-import { Grid, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, withStyles } from "@material-ui/core";//from "@mui/material";
+import { Grid, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, withStyles, Button, ButtonGroup } from "@material-ui/core";//from "@mui/material";
 import React, {useState, useEffect} from "react";
 import { connect } from "react-redux";
 import * as actions from "../actions/book"
@@ -23,6 +23,8 @@ const styles = theme => ({
 // const[classes ...props] = props
 
 const Books = ({classes,...props}) => {
+const [currentId, setCurrentId] = useState(0)
+
     const [x,setX] = useState(0);  
 
     useEffect(()=>{
@@ -42,10 +44,11 @@ const Books = ({classes,...props}) => {
                                 <Table>
                                     <TableHead className={classes.root}>
                                         <TableRow>
-                                            <TableCell>BookId</TableCell>
-                                            <TableCell>AuthorId</TableCell>
+                                            <TableCell>ID</TableCell>
+                                            <TableCell>AuthorID</TableCell>
                                             <TableCell>Title</TableCell>
-                                            <TableCell>PagesNumber</TableCell>
+                                            <TableCell>Pages</TableCell>
+                                            <TableCell></TableCell>
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
@@ -56,6 +59,12 @@ const Books = ({classes,...props}) => {
                                                     <TableCell>{record.authorId}</TableCell>
                                                     <TableCell>{record.title}</TableCell>
                                                     <TableCell>{record.pagesNumber}</TableCell>
+                                                    <TableCell>
+                                                    <ButtonGroup variant="text" aria-label="actions">
+                                                        <Button onClick={() => {setCurrentId(record.bookId); console.log(record.bookId)}}>✍</Button>
+                                                        <Button>🔥</Button>
+                                                    </ButtonGroup>
+                                                    </TableCell>
                                                 </TableRow>)
                                         })
                                     } 
@@ -67,9 +76,7 @@ const Books = ({classes,...props}) => {
                 </Grid>
                 <Grid container item xs={6} style={{height: '10px'}}>
                     <Paper className={classes.paper}   elevation={3}>
-                        
-                            <BookForm/>
-                        
+                            <BookForm {...({currentId, setCurrentId})}/>
                     </Paper>
                 </Grid>
             </Grid>
