@@ -3,6 +3,7 @@ import React, {useState, useEffect} from "react";
 import { connect } from "react-redux";
 import * as actions from "../actions/book"
 import BookForm from "./BookForm";
+import { useToasts } from "react-toast-notifications";
 
 const styles = theme => ({
     // override class - klase se pobierasz z f12 loool
@@ -19,11 +20,18 @@ const styles = theme => ({
     }
 })
 
+
+
+
 // props.classes
 // const[classes ...props] = props
 
+
 const Books = ({classes,...props}) => {
-const [currentId, setCurrentId] = useState(0)
+    const [currentId, setCurrentId] = useState(0)
+
+    // tosty for riiil bym zjad tbh gloduwa frrr 100
+    const {addToast} = useToasts()
 
     const [x,setX] = useState(0);  
 
@@ -31,6 +39,11 @@ const [currentId, setCurrentId] = useState(0)
         props.fetchAllBooks()
     },[])// componentDidMount
 
+
+    const onDelete = bookId =>{
+        if(window.confirm("Delete book from database?"))
+        props.deleteBook(bookId,()=>addToast("Deleted!",{appearance:"info"}))
+    }
 
 
     return ( 
@@ -62,7 +75,7 @@ const [currentId, setCurrentId] = useState(0)
                                                     <TableCell>
                                                     <ButtonGroup variant="text" aria-label="actions">
                                                         <Button onClick={() => {setCurrentId(record.bookId); console.log(record.bookId)}}>✍</Button>
-                                                        <Button>🔥</Button>
+                                                        <Button onClick={()=> onDelete(record.bookId)}>🔥</Button>
                                                     </ButtonGroup>
                                                     </TableCell>
                                                 </TableRow>)
@@ -91,7 +104,8 @@ const mapStateToProps = state=>({
 })
 
 const mapActionsToProps = {
-    fetchAllBooks : actions.fetchall
+    fetchAllBooks : actions.fetchall,
+    deleteBook: actions.deleteBook
 }
 
 export default connect(mapStateToProps, mapActionsToProps)(withStyles(styles)(Books));
