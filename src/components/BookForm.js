@@ -1,6 +1,8 @@
 import React, {useState} from "react";
 import { Grid, TextField, withStyles, Button } from "@material-ui/core";
 import useForm from "./useForm";
+import { connect } from "react-redux";
+import * as actions from "../actions/book"
 
 const styles = theme => ({
     // override class - klase se pobierasz z f12 loool
@@ -53,8 +55,8 @@ const BookForm = ({classes, ...props}) => {
     const handleSubmit = e => {
         e.preventDefault()
         console.log(values)
-        if(!validate()){
-            //window.alert('Please try again')
+        if(validate()){
+            props.createBook(values, () =>{window.alert('inserted')})
         }
     }
 
@@ -105,4 +107,15 @@ const BookForm = ({classes, ...props}) => {
     );
 }
 
-export default withStyles(styles)(BookForm);
+const mapStateToProps = state=>({
+
+    BookList:state.book.list
+
+})
+
+const mapActionsToProps = {
+    createBook : actions.create,
+    updateBook : actions.update,
+}
+
+export default connect(mapStateToProps,mapActionsToProps) (withStyles(styles)(BookForm));
