@@ -25,16 +25,21 @@ const initalFieldValues = {
 
 const BookForm = ({classes, ...props}) => {
     
-    const validate = () => {
+    // validate()
+    // validate({title: 'kuba'})
+    const validate = (fieldValues = values) => {
         let temp ={}
-        temp.title = values.title?"":"Required"
-        temp.authorId = values.authorId?"":"Required"
-        temp.pagesNumber = values.pagesNumber?"":"Required"
+        if ('title' in fieldValues)
+            temp.title = fieldValues.title?"":"Required"
+        if ('authorId' in fieldValues)
+            temp.authorId = fieldValues.authorId?"":"Required"
+        if ('pagesNumber' in fieldValues)
+            temp.pagesNumber = fieldValues.pagesNumber?"":"Required"
         setErrors({
             ...temp
         })
-
-        return Object.values(temp).every(x=> x== "")
+        if(fieldValues == values)
+            return Object.values(temp).every(x=> x== "")
     }
 
   const {
@@ -43,7 +48,7 @@ const BookForm = ({classes, ...props}) => {
         errors,
         setErrors,
         handleInputChange
-    } = useForm(initalFieldValues) 
+    } = useForm(initalFieldValues,validate) 
 
     const handleSubmit = e => {
         e.preventDefault()
